@@ -36,6 +36,12 @@
           {{ loading ? 'Connexion en cours...' : 'Se connecter' }}
         </button>
       </form>
+      <div class="mt-6 text-center">
+        <p class="text-gray-600">
+          Vous n'avez pas encore un compte ? Veuillez s'inscrire 
+          <router-link to="/register" class="text-blue-600 hover:underline">S'inscrire</router-link>
+        </p>
+      </div>
     </div>
   </div>
 </template>
