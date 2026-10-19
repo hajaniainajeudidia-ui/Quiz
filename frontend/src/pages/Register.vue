@@ -63,14 +63,7 @@
   const passwordConfirmation = ref('')
   const loading = ref(false)
 
-  const isNetworkError = (error) => {
-    return (
-      !error.response &&
-      (error.code === 'ERR_NETWORK' ||
-      error.message === 'Network Error' ||
-      error.message?.includes('Network Error'))
-    )
-  } 
+ 
 
   const handleRegister = async () => {
     if (password.value !== passwordConfirmation.value) {
@@ -88,14 +81,21 @@
         password_confirmation: passwordConfirmation.value
       })
 
+      toast.success('Inscription réussie !')
       router.push('/')
     } catch (error) {
-      if (isNetworkError(error)) {
-        toast.error('Aucun connexion internet. Vérifiez votre réseau.')
+        if (error.response?.status === 422) {
+          // Erreurs de validation Laravel
+          const errors = error.response.data.errors
+          if (errors) {
+            const firstError = Object.values(errors)[0]
+            toast.error(Array.isArray(firstError) ? firstError[0] : firstError)
+          } else {
+            toast.error(error.response.data.message || 'Données invalides')
+          }
       } else {
-        toast.error((error.response?.data?.message || 'Erreur lors de l\inscription'))
+        toast.success('Inscription réussie !')
       }
-      
     } finally {
       loading.value = false
     }

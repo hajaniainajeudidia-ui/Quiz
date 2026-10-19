@@ -87,61 +87,61 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useAuthStore } from '../stores/auth'
-import { useRouter } from 'vue-router'
-import api from '../services/api'
-import { ClipboardListIcon, HelpCircleIcon, UsersIcon, TrophyIcon, LogOutIcon } from 'lucide-vue-next'
-import { useToast } from 'vue-toastification'
+  import { ref, onMounted } from 'vue'
+  import { useAuthStore } from '../stores/auth'
+  import { useRouter } from 'vue-router'
+  import api from '../services/api'
+  import { ClipboardListIcon, HelpCircleIcon, UsersIcon, TrophyIcon, LogOutIcon } from 'lucide-vue-next'
+  import { useToast } from 'vue-toastification'
 
-const toast = useToast()
+  const toast = useToast()
 
-const authStore = useAuthStore()
-const router = useRouter()
-const loading = ref(true)
+  const authStore = useAuthStore()
+  const router = useRouter()
+  const loading = ref(true)
 
-//Initialisation de statistiques
-const stats = ref({
-  total_quizzes: 0,
-  total_questions: 0,
-  total_users: 0,
-  total_attempts: 0,
-  recent_attempts: 0,
-  top_score: null
-})
+  //Initialisation de statistiques
+  const stats = ref({
+    total_quizzes: 0,
+    total_questions: 0,
+    total_users: 0,
+    total_attempts: 0,
+    recent_attempts: 0,
+    top_score: null
+  })
 
-const isNetworkError = (error) => {
-    return (
-      !error.response &&
-      (error.code === 'ERR_NETWORK' ||
-      error.message === 'Network Error' ||
-      error.message?.includes('Network Error'))
-    )
-  } 
+  const isNetworkError = (error) => {
+      return (
+        !error.response &&
+        (error.code === 'ERR_NETWORK' ||
+        error.message === 'Network Error' ||
+        error.message?.includes('Network Error'))
+      )
+    } 
 
-//Recuperation de statistique
-const loadStats = async () => {
-  loading.value = true   
-  try {
-    const response = await api.get('/admin/dashboard/stats')
-    stats.value = response.data.stats
-    console.log("stats:", stats.value)
-  } catch (error) {
-    if (isNetworkError(error)) {
-        toast.error('Aucun connexion internet. Vérifiez votre réseau.')
-      } else {
-        toast.error('Erreur de chargement de State')
+  //Recuperation de statistique
+  const loadStats = async () => {
+    loading.value = true   
+    try {
+      const response = await api.get('/admin/dashboard/stats')
+      stats.value = response.data.stats
+      console.log("stats:", stats.value)
+    } catch (error) {
+      if (isNetworkError(error)) {
+          toast.error('Aucun connexion internet. Vérifiez votre réseau.')
+        } else {
+          toast.error('Erreur de chargement de State')
+      }
+      
+    } finally {
+      loading.value = false   
     }
-    
-  } finally {
-    loading.value = false   
   }
-}
 
 
 
-onMounted(() => {
-  authStore.loadUserFromStorage()
-  loadStats()
-})
+  onMounted(() => {
+    authStore.loadUserFromStorage()
+    loadStats()
+  })
 </script>

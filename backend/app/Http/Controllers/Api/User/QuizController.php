@@ -45,7 +45,7 @@ class QuizController extends Controller
     //Liste les Quiz 
     public function index()
     {
-        $quizzes = Quiz::where('is_active', true)->withCount('questions')->orderBy('title')->get();
+        $quizzes = Quiz::where('is_active', true)->withCount('questions')->orderBy('created_at', 'asc')->get();
 
         return response()->json([
             'status' => true,
@@ -269,53 +269,66 @@ class QuizController extends Controller
     public function myScores(Request $request)
     {
         $attempts = UserQuizAttempt::with([
-                'quiz',
-                'userAnswers.question.answers'  // Pour afficher les corrections
-            ])
-            ->where('user_id', $request->user()->id)
-            ->whereNotNull('completed_at')
-            ->orderBy('completed_at', 'desc')
-            ->get();
+            'quiz',
+            'userAnswers.question.answers',
+            'userAnswers.answer'
+        ])
+        ->where('user_id', $request->user()->id)
+        ->whereNotNull('completed_at')
+        ->join('quizzes', 'user_quiz_attempts.quiz_id', '=', 'quizzes.id')
+        ->orderBy('quizzes.created_at', 'asc')
+        ->orderBy('user_quiz_attempts.completed_at', 'desc')
+        ->select('user_quiz_attempts.*')
+        ->get();
 
         $scores = $attempts->map(function ($attempt) {
             $correctAnswers = 0;
             $details = [];
 
             foreach ($attempt->userAnswers as $userAnswer) {
-                $correctAnswer = $userAnswer->question->answers->firstWhere('is_correct', true);
-                
+                $question = $userAnswer->question;
+                $correctAnswer = $question->answers->firstWhere('is_correct', true);
+
                 $isCorrect = $userAnswer->answer_id === ($correctAnswer?->id);
 
-                if ($isCorrect) $correctAnswers++;
+                if ($isCorrect) {
+                    $correctAnswers++;
+                }
 
                 $details[] = [
-                    'question' => $userAnswer->question->question_text,
-                    'user_answer' => $userAnswer->answer->answer_text,
+                    'question'       => $question->question_text,
+                    'user_answer'    => $userAnswer->answer->answer_text ?? 'Non répondu',
                     'correct_answer' => $correctAnswer?->answer_text ?? 'N/A',
-                    'is_correct' => $isCorrect,
-                    'points' => $isCorrect ? $userAnswer->question->points : 0
+                    'is_correct'     => $isCorrect,
+                    'points'         => $isCorrect ? ($question->points ?? 10) : 0,
                 ];
             }
 
-            $percentage = $attempt->total_questions > 0 
-                ? round(($correctAnswers / $attempt->total_questions) * 100, 2) 
+            $totalQuestions = $attempt->total_questions > 0
+                ? $attempt->total_questions
+                : $attempt->userAnswers->count();
+
+            $percentage = $totalQuestions > 0
+                ? round(($correctAnswers / $totalQuestions) * 100, 2)
                 : 0;
 
             return [
-                'attempt_id' => $attempt->id,
-                'quiz_id' => $attempt->quiz_id,
-                'quiz_title' => $attempt->quiz->title,
-                'score' => $attempt->score,
-                'total_questions' => $attempt->total_questions,
-                'percentage' => $percentage,
-                'completed_at' => $attempt->completed_at,
-                'details' => $details
+                'attempt_id'      => $attempt->id,
+                'quiz_id'         => $attempt->quiz_id,
+                'quiz_title'      => $attempt->quiz->title ?? 'Quiz inconnu',
+                'quiz_created_at' => $attempt->quiz->created_at ?? null,
+                'score'           => $attempt->score,
+                'correct_answers' => $correctAnswers,
+                'total_questions' => $totalQuestions,
+                'percentage'      => $percentage,
+                'completed_at'    => $attempt->completed_at,
+                'details'         => $details,
             ];
         });
 
         return response()->json([
             'status' => true,
-            'scores' => $scores
+            'scores' => $scores,
         ]);
     }
 }

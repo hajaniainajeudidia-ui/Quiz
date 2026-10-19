@@ -1,70 +1,83 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50">
-    
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+      <!-- Loading -->
+      <div v-if="loading" class="flex justify-center items-center py-32">
+        <div class="text-center">
+          <div class="animate-spin w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p class="text-gray-600">Chargement des résultats...</p>
+        </div>
+      </div>
 
-    <div class="max-w-4xl mx-auto px-6 py-12">
-      <div class="bg-white rounded-3xl shadow-xl p-10">
-        <!-- Score Principal -->
-        <div class="text-center mb-10">
-          <h1 class="text-4xl font-bold text-gray-800 mb-2">Votre Résultat</h1>
-          <div class="text-7xl font-bold text-indigo-600 mt-6 mb-2">
-            {{ score }} <span class="text-4xl text-gray-400">/ 100</span>
+      <!-- Résultat -->
+      <div v-else class="bg-white rounded-3xl shadow-xl p-8 sm:p-12 text-center">
+        <!-- Icône / Message -->
+        <div class="mb-8">
+          <div class="mx-auto w-24 h-24 rounded-full flex items-center justify-center mb-6"
+               :class="percentage >= 60 ? 'bg-green-100' : 'bg-orange-100'">
+            <TrophyIcon v-if="percentage >= 80" size="48" class="text-amber-500" />
+            <ThumbsUpIcon v-else-if="percentage >= 60" size="48" class="text-blue-600" />
+            <DumbbellIcon v-else-if="percentage >= 40" size="48" class="text-yellow-600" />
+            <BookOpenIcon v-else size="48" class="text-orange-600" />
           </div>
-          <div class="text-2xl font-semibold text-gray-600">
-            {{ percentage }}%
+
+          <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-3">
+            Résultat du Quiz
+          </h1>
+
+          <p class="text-xl font-semibold flex items-center justify-center gap-2" :class="messageColor">
+            {{ message }}
+          </p>
+        </div>
+
+        <!-- Score -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+          <div class="bg-indigo-50 rounded-2xl p-6">
+            <p class="text-3xl font-bold text-indigo-600">{{ score }}</p>
+            <p class="text-gray-600 text-sm mt-1">Points obtenus</p>
+          </div>
+          <div class="bg-gray-50 rounded-2xl p-6">
+            <p class="text-3xl font-bold text-gray-800">{{ totalQuestions }}</p>
+            <p class="text-gray-600 text-sm mt-1">Questions</p>
+          </div>
+          <div class="bg-emerald-50 rounded-2xl p-6">
+            <p class="text-3xl font-bold text-emerald-600">{{ percentage }}%</p>
+            <p class="text-gray-600 text-sm mt-1">Réussite</p>
           </div>
         </div>
 
-        <!-- Message motivant -->
-        <p :class="['text-2xl font-semibold flex items-center justify-center gap-2', messageColor]">
-          <PartyPopperIcon v-if="messageIcon === 'party'" size="28" />
-          <ThumbsUpIcon v-else-if="messageIcon === 'thumbs-up'" size="28" />
-          <DumbbellIcon v-else-if="messageIcon === 'muscle'" size="28" />
-          <BookOpenIcon v-else-if="messageIcon === 'book'" size="28" />
-          {{ message }}
-        </p>
-
-        <!-- Récapitulatif -->
+        <!-- Barre de progression -->
         <div class="mb-10">
-          <h3 class="text-xl font-semibold text-gray-800 mb-6">Récapitulatif des réponses</h3>
-          
-          <div v-for="(item, index) in resultDetails" :key="index" 
-               class="flex items-start gap-6 p-5 border border-gray-100 rounded-2xl mb-4">
-            <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
-                :class="item.isCorrect ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'">
-              <CheckCircleIcon v-if="item.isCorrect" size="20" />
-              <XCircleIcon v-else size="20" />
-            </div>
-            
-            <div class="flex-1">
-              <p class="font-medium text-gray-800">{{ item.question }}</p>
-              <p class="text-sm mt-2">
-                Votre réponse : 
-                <span :class="item.isCorrect ? 'text-green-600' : 'text-red-600'">
-                  {{ item.userAnswer }}
-                </span>
-              </p>
-              <p v-if="!item.isCorrect" class="text-sm text-green-600 mt-1">
-                Bonne réponse : {{ item.correctAnswer }}
-              </p>
-            </div>
+          <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              class="h-full rounded-full transition-all duration-700"
+              :class="percentage >= 60 ? 'bg-green-500' : percentage >= 40 ? 'bg-yellow-500' : 'bg-orange-500'"
+              :style="{ width: percentage + '%' }"
+            ></div>
           </div>
         </div>
 
-        <!-- Boutons d'action -->
-        <div class="flex flex-col sm:flex-row gap-4">
-          <button
-            @click="restartQuiz"
-            class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 rounded-2xl transition"
-          >
-            Recommencer le Quiz
-          </button>
-          
+        <!-- Boutons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <router-link
             to="/"
-            class="flex-1 border border-gray-300 hover:bg-gray-50 font-semibold py-4 rounded-2xl text-center transition"
+            class="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-semibold hover:bg-indigo-700 transition"
           >
-            Retour à l'accueil
+            Rejouer le Quiz
+          </router-link>
+
+          <router-link
+            to="/my-scores"
+            class="border border-gray-300 px-8 py-4 rounded-2xl font-medium hover:bg-gray-50 transition"
+          >
+            Voir mes scores
+          </router-link>
+
+          <router-link
+            to="/leaderboard"
+            class="border border-gray-300 px-8 py-4 rounded-2xl font-medium hover:bg-gray-50 transition"
+          >
+            Classement
           </router-link>
         </div>
       </div>
@@ -73,92 +86,89 @@
 </template>
 
 <script setup>
-  import { ThumbsUpIcon, CheckCircleIcon, XCircleIcon, PartyPopperIcon, DumbbellIcon, BookOpenIcon } from 'lucide-vue-next'
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import api from '../services/api'
-  import { useAuthStore } from '../stores/auth'
   import { useToast } from 'vue-toastification'
-
-  const toast = useToast()
+  import {
+    TrophyIcon,
+    ThumbsUpIcon,
+    DumbbellIcon,
+    BookOpenIcon
+  } from 'lucide-vue-next'
 
   const route = useRoute()
   const router = useRouter()
-  const authStore = useAuthStore()
+  const toast = useToast()
 
-  const attemptId = ref(route.params.attemptId)
+  const attemptId = route.params.attemptId || route.params.id
+
+  const loading = ref(true)
   const score = ref(0)
+  const totalQuestions = ref(0)
   const percentage = ref(0)
-  const resultDetails = ref([])
-
   const message = ref('')
-  const messageColor = ref('')
-
-  const messageIcon = ref('')
+  const messageColor = ref('text-gray-600')
 
   const isNetworkError = (error) => {
+    if (!navigator.onLine) return true
     return (
       !error.response &&
       (error.code === 'ERR_NETWORK' ||
-      error.message === 'Network Error' ||
-      error.message?.includes('Network Error'))
+        error.message === 'Network Error' ||
+        error.message?.includes('Network Error'))
     )
-  }  
+  }
 
-  const fetchResult = async () => {
+  const loadResult = async () => {
+    loading.value = true
     try {
-      const response = await api.get(`/quiz/result/${attemptId.value}`)
+      const response = await api.get(`/quiz/result/${attemptId}`)
+
+      // Adapte selon la structure exacte de ton API
       const data = response.data
 
-      score.value = data.attempt.score
-      percentage.value = data.score_percentage
+      score.value = data.score ?? data.attempt?.score ?? 0
+      totalQuestions.value = data.total_questions ?? data.attempt?.total_questions ?? 10
+
+      // Calcul du pourcentage
+      if (totalQuestions.value > 0) {
+        percentage.value = Math.round((score.value / (totalQuestions.value * 10)) * 100)
+        // Si ton backend renvoie déjà le pourcentage :
+        // percentage.value = data.percentage ?? Math.round(...)
+      }
 
       // Message selon le score
       if (percentage.value >= 80) {
-        message.value = "Excellent travail !"
-        messageColor.value = "text-green-600"
-        messageIcon.value = "party"
+        message.value = 'Excellent travail !'
+        messageColor.value = 'text-green-600'
       } else if (percentage.value >= 60) {
-        message.value = "Bien joué ! Continuez comme ça"
-        messageColor.value = "text-blue-600"
-        messageIcon.value = "thumbs-up"
+        message.value = 'Bien joué ! Continuez comme ça'
+        messageColor.value = 'text-blue-600'
       } else if (percentage.value >= 40) {
-        message.value = "Pas mal, mais vous pouvez faire mieux"
-        messageColor.value = "text-yellow-600"
-        messageIcon.value = "muscle"
+        message.value = 'Pas mal, mais vous pouvez faire mieux'
+        messageColor.value = 'text-yellow-600'
       } else {
-        message.value = "Encore un effort ! Ne baissez pas les bras"
-        messageColor.value = "text-orange-600"
-        messageIcon.value = "book"
+        message.value = 'Encore un effort ! Ne baissez pas les bras'
+        messageColor.value = 'text-orange-600'
       }
-
-      // Récapitulatif (simplifié pour l'instant)
-      resultDetails.value = data.attempt.userAnswers?.map(ua => ({
-        question: ua.question.question_text,
-        userAnswer: ua.answer.answer_text,
-        correctAnswer: ua.question.answers.find(a => a.is_correct)?.answer_text || '',
-        isCorrect: ua.answer.id === ua.question.answers.find(a => a.is_correct)?.id
-      })) || []
-
     } catch (error) {
       if (isNetworkError(error)) {
         toast.error('Aucun connexion internet. Vérifiez votre réseau.')
       } else {
         toast.error('Impossible de charger les résultats')
       }
-      
-      
+      router.push('/')
+    } finally {
+      loading.value = false
     }
   }
 
-  const restartQuiz = () => {
-    router.push('/quiz/start')
-  }
-
-
-  // Initialisation
   onMounted(() => {
-    authStore.loadUserFromStorage()
-    fetchResult()
+    if (!attemptId) {
+      router.push('/')
+      return
+    }
+    loadResult()
   })
 </script>

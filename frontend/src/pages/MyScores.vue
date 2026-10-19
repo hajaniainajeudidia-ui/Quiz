@@ -1,95 +1,95 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50">
-    
-
-    <div class="max-w-6xl mx-auto px-6 py-12">
-      <h1 class="text-4xl font-bold text-gray-800 mb-10 flex items-center gap-3">
-        <BarChart3Icon size="42" class="text-indigo-600" />
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+      <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+        <BarChart3Icon size="40" class="text-indigo-600" />
         Mes Scores
       </h1>
 
       <!-- Loading -->
-      <div v-if="loading" class="flex justify-center py-32">
-        <div class="animate-spin w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full"></div>
+      <div v-if="loading" class="flex justify-center items-center py-32">
+        <div class="text-center">
+          <div class="animate-spin w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p class="text-gray-600">Chargement de vos scores...</p>
+        </div>
       </div>
 
       <!-- Aucun score -->
-      <div v-else-if="scores.length === 0" class="text-center py-20 bg-white rounded-3xl shadow">
-        <p class="text-3xl mb-4 flex justify-center">
-          <FrownIcon size="42" class="text-gray-400" />
-        </p>
-        <p class="text-xl text-gray-600">Vous n'avez pas encore complété de quiz.</p>
-        <router-link 
-          to="/quiz/start" 
-          class="mt-6 inline-block bg-indigo-600 text-white px-8 py-4 rounded-2xl font-semibold hover:bg-indigo-700"
+      <div v-else-if="scores.length === 0" class="bg-white rounded-3xl shadow p-12 text-center">
+        <FrownIcon size="48" class="text-gray-400 mx-auto mb-4" />
+        <p class="text-xl text-gray-500">Aucun score enregistré pour le moment.</p>
+        <router-link
+          to="/"
+          class="inline-block mt-6 bg-indigo-600 text-white px-8 py-3 rounded-2xl font-semibold hover:bg-indigo-700 transition"
         >
           Commencer un Quiz
         </router-link>
       </div>
 
-      <!-- Liste des Scores -->
-      <div v-else class="space-y-8">
-        <div 
-          v-for="score in scores" 
-          :key="score.attempt_id"
-          class="bg-white rounded-3xl shadow-xl overflow-hidden"
+      <!-- Liste des scores -->
+      <div v-else class="space-y-6">
+        <div
+          v-for="item in scores"
+          :key="item.attempt_id"
+          class="bg-white rounded-3xl shadow overflow-hidden"
         >
-          <!-- En-tête -->
-          <div class="bg-gradient-to-r from-indigo-600 to-blue-600 px-8 py-6 text-white">
-            <div class="flex justify-between items-center">
-              <div>
-                <h3 class="text-2xl font-semibold">{{ score.quiz_title }}</h3>
-                <p class="text-indigo-100 text-sm mt-1">
-                  {{ formatDate(score.completed_at) }}
+          <!-- En-tête du quiz -->
+          <div
+            class="p-6 cursor-pointer flex justify-between items-center hover:bg-gray-50 transition"
+            @click="toggleDetails(item.attempt_id)"
+          >
+            <div>
+              <h2 class="text-xl font-semibold text-gray-800">{{ item.quiz_title }}</h2>
+              <p class="text-sm text-gray-500 mt-1">
+                {{ formatDate(item.completed_at) }}
+              </p>
+            </div>
+
+            <div class="flex items-center gap-6">
+              <div class="text-right">
+                <p class="text-2xl font-bold text-indigo-600">{{ item.percentage }}%</p>
+                <p class="text-sm text-gray-500">
+                  {{ item.correct_answers }}/{{ item.total_questions }}
                 </p>
               </div>
-              <div class="text-right">
-                <div class="text-5xl font-bold">{{ score.score }}</div>
-                <div class="text-xl">{{ score.percentage }}%</div>
-              </div>
+              <ChevronDownIcon
+                size="24"
+                class="text-gray-400 transition-transform"
+                :class="{ 'rotate-180': openId === item.attempt_id }"
+              />
             </div>
           </div>
 
-          <!-- Détails des réponses -->
-          <div class="p-8">
-            <h4 class="font-medium text-gray-700 mb-5">Correction détaillée</h4>
-            
-            <div class="space-y-5">
-              <div 
-                v-for="(item, index) in score.details" 
-                :key="index"
-                class="flex gap-5 p-5 rounded-2xl border"
-                :class="item.is_correct ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'"
-              >
-                <div class="text-3xl flex-shrink-0">
-                  <span v-if="item.is_correct">
-                    <CheckCircleIcon size="32" class="text-green-600" />
-                  </span>
-                  <span v-else>
-                    <XCircleIcon size="32" class="text-red-600" />
-                  </span>
-                </div>
+          <!-- Détails (corrections) -->
+          <div v-if="openId === item.attempt_id" class="border-t px-6 py-4 space-y-4">
+            <div
+              v-for="(detail, index) in item.details"
+              :key="index"
+              class="flex gap-4 p-4 rounded-2xl"
+              :class="detail.is_correct ? 'bg-green-50' : 'bg-red-50'"
+            >
+              <div class="flex-shrink-0 mt-1">
+                <CheckCircleIcon v-if="detail.is_correct" size="24" class="text-green-600" />
+                <XCircleIcon v-else size="24" class="text-red-600" />
+              </div>
 
-                <div class="flex-1">
-                  <p class="font-medium text-gray-800">{{ item.question }}</p>
-                  
-                  <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span class="text-gray-500">Votre réponse :</span><br>
-                      <span :class="item.is_correct ? 'text-green-600 font-medium' : 'text-red-600 font-medium'">
-                        {{ item.user_answer }}
-                      </span>
-                    </div>
-                    <div v-if="!item.is_correct">
-                      <span class="text-gray-500">Bonne réponse :</span><br>
-                      <span class="text-green-600 font-medium">{{ item.correct_answer }}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="text-right font-semibold text-lg w-16">
-                  {{ item.points }} pts
-                </div>
+              <div class="flex-1">
+                <p class="font-medium text-gray-800 mb-2">
+                  {{ index + 1 }}. {{ detail.question }}
+                </p>
+                <p class="text-sm">
+                  <span class="text-gray-500">Votre réponse :</span>
+                  <span :class="detail.is_correct ? 'text-green-700' : 'text-red-700'">
+                    {{ detail.user_answer }}
+                  </span>
+                </p>
+                <p v-if="!detail.is_correct" class="text-sm mt-1">
+                  <span class="text-gray-500">Bonne réponse :</span>
+                  <span class="text-green-700">{{ detail.correct_answer }}</span>
+                </p>
+                <p class="text-xs text-gray-400 mt-1">
+                  {{ detail.points }} point(s)
+                </p>
               </div>
             </div>
           </div>
@@ -100,32 +100,35 @@
 </template>
 
 <script setup>
-  import { BarChart3Icon, CheckCircleIcon, XCircleIcon, FrownIcon } from 'lucide-vue-next'
   import { ref, onMounted } from 'vue'
-  import { useRouter } from 'vue-router'
-  import { useAuthStore } from '../stores/auth'
   import api from '../services/api'
   import { useToast } from 'vue-toastification'
+  import {
+    BarChart3Icon,
+    FrownIcon,
+    ChevronDownIcon,
+    CheckCircleIcon,
+    XCircleIcon
+  } from 'lucide-vue-next'
 
   const toast = useToast()
 
-  const router = useRouter()
-  const authStore = useAuthStore()
-
   const scores = ref([])
   const loading = ref(true)
-
+  const openId = ref(null)
 
   const isNetworkError = (error) => {
+    if (!navigator.onLine) return true
     return (
       !error.response &&
       (error.code === 'ERR_NETWORK' ||
-      error.message === 'Network Error' ||
-      error.message?.includes('Network Error'))
+        error.message === 'Network Error' ||
+        error.message?.includes('Network Error'))
     )
-  } 
+  }
 
   const loadScores = async () => {
+    loading.value = true
     try {
       const response = await api.get('/quiz/my-scores')
       scores.value = response.data.scores || []
@@ -135,17 +138,19 @@
       } else {
         toast.error('Impossible de charger vos scores')
       }
-      
     } finally {
       loading.value = false
     }
   }
 
+  const toggleDetails = (id) => {
+    openId.value = openId.value === id ? null : id
+  }
+
   const formatDate = (dateString) => {
     if (!dateString) return '-'
-    const date = new Date(dateString)
-    return date.toLocaleDateString('fr-FR', {
-      day: 'numeric',
+    return new Date(dateString).toLocaleDateString('fr-FR', {
+      day: '2-digit',
       month: 'long',
       year: 'numeric',
       hour: '2-digit',
@@ -153,10 +158,7 @@
     })
   }
 
-
-  // Initialisation
   onMounted(() => {
-    authStore.loadUserFromStorage()
     loadScores()
   })
 </script>

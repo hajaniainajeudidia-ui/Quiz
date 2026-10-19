@@ -33,6 +33,24 @@ export const useAuthStore = defineStore('auth', {
                 this.user = JSON.parse(savedUser)
             }
         },
+        async register(userData) {
+            try {
+                const response = await api.post('/register', userData)
+
+                const { token, user } = response.data
+
+                localStorage.setItem('token', token)
+                localStorage.setItem('user', JSON.stringify(user))
+
+                token.value = token
+                user.value = user
+                isAuthenticated.value = true
+
+                return response.data
+            } catch (error) {
+                throw error  // ← obligatoire
+            }
+        },
 
         logout() {
 
