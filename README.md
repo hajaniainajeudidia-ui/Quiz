@@ -119,7 +119,13 @@ Quiz/
 ---
 
 
+## Clone this repository
 
+```bash
+git clone https://github.com/YourUsername/Quiz.git
+
+
+```
 ### 1. Backend
 
 
