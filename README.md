@@ -398,17 +398,3 @@ Voir les fichiers `LICENSE` dans `backend/` et `frontend/`.
 ---
 
 
-
-## 👨‍💻 Auteur
-
-
-
-Projet réalisé dans le cadre d’un apprentissage **Laravel + Vue.js**.
-
-```
-
-
-
----
-
-
