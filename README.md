@@ -1,30 +1,13 @@
-**✅ README Complet pour le dossier `Quiz`**
-
-
-
-Colle ce contenu dans le fichier **`Quiz/README.md`** :
-
-
-
-```markdown
-
 # 🎯 Quiz App
-
-
 
 Application web complète de quiz en ligne, composée d’un **backend Laravel 12** et d’un **frontend Vue 3**.
 
-
-
 Le parcours de quiz suit l’ordre de création des quizzes (`created_at` croissant), avec timer, scores détaillés, classement et espace d’administration.
-
-
 
 ---
 
-
-
 ## 📁 Structure du Projet
+
 
 
 
