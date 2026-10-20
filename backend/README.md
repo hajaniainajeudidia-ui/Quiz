@@ -1,4 +1,3 @@
-```markdown
 # Quiz App - Backend API
 
 API REST complète pour une application de quiz en ligne, développée avec **Laravel 12**.
