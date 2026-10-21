@@ -1,4 +1,3 @@
-```markdown
 # Quiz App - Frontend
 
 Application frontend d'un système de quiz en ligne, développée avec **Vue 3 + Vite**.
@@ -58,7 +57,7 @@ npm install
 Crée un fichier `.env` à la racine :
 
 ```env
-VITE_API_URL=http://127.0.0.1:8000/api/v1
+VITE_API_URL=http://127.0.0.1:8000/api
 ```
 
 ### 4. Lancer le serveur de développement
@@ -80,21 +79,17 @@ src/
 │   └── Layout/
 │       └── AppLayout.vue
 ├── pages/
-│   ├── Admin/
-│   │   ├── Dashboard.vue
-│   │   ├── Quiz/
-│   │   │   └── Index.vue
-│   │   └── Question/
-│   │       └── Index.vue
-│   ├── Quiz/
-│   │   ├── Start.vue
-│   │   ├── TakeQuiz.vue
-│   │   └── Result.vue
+│   ├── AdminDashboard.vue
+│   ├── AdminQuestion.vue
+│   ├── AdminQuiz.vue
 │   ├── Home.vue
-│   ├── Login.vue
-│   ├── Register.vue
 │   ├── Leaderboard.vue
-│   └── MyScores.vue
+│   ├── Login.vue
+│   ├── MyScores.vue
+│   ├── QuizResult.vue
+│   ├── QuizStart.vue
+│   ├── Register.vue
+│   └── TakeQuiz.vue
 ├── router/
 │   └── index.js
 ├── services/
