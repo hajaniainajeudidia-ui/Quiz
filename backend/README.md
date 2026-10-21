@@ -80,7 +80,7 @@ L’API sera accessible sur : `http://127.0.0.1:8000`
 ### Register
 
 ```http
-POST /api/v1/register
+POST /api/register
 ```
 
 ```json
@@ -95,7 +95,7 @@ POST /api/v1/register
 ### Login
 
 ```http
-POST /api/v1/login
+POST /api/login
 ```
 
 ```json
@@ -128,28 +128,28 @@ POST /api/v1/login
 
 | Méthode | Endpoint                        | Description                  |
 |---------|---------------------------------|------------------------------|
-| GET     | `/api/v1/quiz`                  | Liste des quizzes actifs     |
-| POST    | `/api/v1/quiz/start`            | Démarrer un quiz             |
-| GET     | `/api/v1/quiz/{attempt}/question/{number}` | Récupérer une question |
-| POST    | `/api/v1/quiz/submit-answer`    | Soumettre une réponse        |
-| POST    | `/api/v1/quiz/finish`           | Terminer le quiz             |
-| GET     | `/api/v1/quiz/result/{attempt}` | Voir le résultat             |
-| GET     | `/api/v1/quiz/leaderboard`      | Classement                   |
-| GET     | `/api/v1/quiz/my-scores`        | Mes scores + corrections     |
+| GET     | `/api/quiz`                  | Liste des quizzes actifs     |
+| POST    | `/api/quiz/start`            | Démarrer un quiz             |
+| GET     | `/api/quiz/{attempt}/question/{number}` | Récupérer une question |
+| POST    | `/api/quiz/submit-answer`    | Soumettre une réponse        |
+| POST    | `/api/quiz/finish`           | Terminer le quiz             |
+| GET     | `/api/quiz/result/{attempt}` | Voir le résultat             |
+| GET     | `/api/quiz/leaderboard`      | Classement                   |
+| GET     | `/api/quiz/my-scores`        | Mes scores + corrections     |
 
 ### Admin (protégé)
 
 | Méthode | Endpoint                        | Description                  |
 |---------|---------------------------------|------------------------------|
-| GET     | `/api/v1/admin/dashboard/stats` | Statistiques du dashboard    |
-| GET     | `/api/v1/admin/quizzes`         | Liste des quizzes            |
-| POST    | `/api/v1/admin/quizzes`         | Créer un quiz                |
-| PUT     | `/api/v1/admin/quizzes/{id}`    | Modifier un quiz             |
-| DELETE  | `/api/v1/admin/quizzes/{id}`    | Supprimer un quiz            |
-| GET     | `/api/v1/admin/questions`       | Liste des questions          |
-| POST    | `/api/v1/admin/questions`       | Créer une question           |
-| PUT     | `/api/v1/admin/questions/{id}`  | Modifier une question        |
-| DELETE  | `/api/v1/admin/questions/{id}`  | Supprimer une question       |
+| GET     | `/api/admin/dashboard/stats` | Statistiques du dashboard    |
+| GET     | `/api/admin/quizzes`         | Liste des quizzes            |
+| POST    | `/api/admin/quizzes`         | Créer un quiz                |
+| PUT     | `/api/admin/quizzes/{id}`    | Modifier un quiz             |
+| DELETE  | `/api/admin/quizzes/{id}`    | Supprimer un quiz            |
+| GET     | `/api/admin/questions`       | Liste des questions          |
+| POST    | `/api/admin/questions`       | Créer une question           |
+| PUT     | `/api/admin/questions/{id}`  | Modifier une question        |
+| DELETE  | `/api/admin/questions/{id}`  | Supprimer une question       |
 
 ---
 
