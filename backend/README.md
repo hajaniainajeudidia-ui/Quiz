@@ -169,24 +169,26 @@ app/
 ├── Http/
 │   ├── Controllers/
 │   │   ├── Api/
-│   │   │   ├── AuthController.php
-│   │   │   ├── QuizController.php
-│   │   │   └── Admin/
-│   │   │       ├── DashboardController.php
-│   │   │       ├── QuizController.php
-│   │   │       └── QuestionController.php
+│   │   │   ├── Admin/
+│   │   │   │   ├── DashboardController.php
+│   │   │   │   ├── QuestionController.php
+│   │   │   │   └── QuizController.php
+│   │   │   └── User/
+│   │   │       ├── AuthController.php
+│   │   │       └── QuizController.php
 │   └── Middleware/
-│       └── AdminMiddleware.php
+│           └── AdminMiddleware.php
 ├── Models/
-│   ├── User.php
-│   ├── Quiz.php
-│   ├── Question.php
 │   ├── Answer.php
-│   └── UserQuizAttempt.php
+│   ├── Question.php
+│   ├── Quiz.php
+│   ├── User.php
+│   ├── UserAnswer.php
+│   └── UserAttempt.php
 database/
 ├── migrations/
 └── seeders/
-    └── QuizSeeder.php
+    └── DatabaseSeeder.php
 routes/
 └── api.php
 ```
