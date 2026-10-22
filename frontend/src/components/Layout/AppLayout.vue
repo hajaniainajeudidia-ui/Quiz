@@ -15,7 +15,7 @@
             <router-link to="/" class="hover:text-indigo-600 transition" :class="{ 'text-indigo-600': $route.path === '/' }">
               Accueil
             </router-link>
-            <router-link to="/quiz/start" class="hover:text-indigo-600 transition flex items-center gap-2">
+            <router-link to="/" class="hover:text-indigo-600 transition flex items-center gap-2">
               <PlayIcon size="18" />
               <span>Passer le Quiz</span>
             </router-link>

@@ -245,41 +245,41 @@ Password : password
 
 ### Authentification
 
-- `POST /api/v1/register`
+- `POST /api/register`
 
-- `POST /api/v1/login`
+- `POST /api/login`
 
-- `POST /api/v1/logout`
+- `POST /api/logout`
 
 
 
 ### Quiz (Utilisateur)
 
-- `GET /api/v1/quiz` → liste des quizzes actifs (ordre `created_at` croissant)
+- `GET /api/quiz` → liste des quizzes actifs (ordre `created_at` croissant)
 
-- `POST /api/v1/quiz/start`
+- `POST /api/quiz/start`
 
-- `GET /api/v1/quiz/{attempt}/question/{number}`
+- `GET /api/quiz/{attempt}/question/{number}`
 
-- `POST /api/v1/quiz/submit-answer`
+- `POST /api/quiz/submit-answer`
 
-- `POST /api/v1/quiz/finish`
+- `POST /api/quiz/finish`
 
-- `GET /api/v1/quiz/result/{attempt}`
+- `GET /api/quiz/result/{attempt}`
 
-- `GET /api/v1/quiz/leaderboard`
+- `GET /api/quiz/leaderboard`
 
-- `GET /api/v1/quiz/my-scores` → scores + corrections détaillées
+- `GET /api/quiz/my-scores` → scores + corrections détaillées
 
 
 
 ### Admin
 
-- `GET /api/v1/admin/dashboard/stats`
+- `GET /api/admin/dashboard/stats`
 
-- `GET|POST|PUT|DELETE /api/v1/admin/quizzes`
+- `GET|POST|PUT|DELETE /api/admin/quizzes`
 
-- `GET|POST|PUT|DELETE /api/v1/admin/questions`
+- `GET|POST|PUT|DELETE /api/admin/questions`
 
 
 
@@ -345,13 +345,15 @@ Le frontend stocke le token dans `localStorage` et l’ajoute automatiquement vi
 | -------------------------- | ------------------------------------------------ |
 | `Home.vue`                 | Accueil + bouton Commencer le Quiz               |
 | `TakeQuiz.vue`             | Passage des questions / enchaînement des quizzes |
-| `Result.vue`               | Score final                                      |
+| `QuizResult.vue`           | Score final                                      |
 | `MyScores.vue`             | Historique + corrections détaillées              |
 | `Leaderboard.vue`          | Classement                                       |
-| `Admin/Dashboard.vue`      | Tableau de bord admin                            |
-| `Admin/Quiz/Index.vue`     | Gestion des quizzes                              |
-| `Admin/Question/Index.vue` | Gestion des questions                            |
-
+| `AdminDashboard.vue`       | Tableau de bord admin                            |
+| `AdminQuiz.vue`            | Gestion des quizzes                              |
+| `AdminQuestion.vue`        | Gestion des questions                            |
+| `Register.vue`             | Page d'inscription                               |
+| `Login.vue`                | Page d'authentification                          |
+| `QuizStart.vue`            | Page de demarrage de Quiz                        |
 
 
 ---
