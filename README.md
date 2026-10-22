@@ -1,4 +1,4 @@
-# 🎯 Quiz App
+# Quiz App
 
 Application web complète de quiz en ligne, composée d’un **backend Laravel 12** et d’un **frontend Vue 3**.
 
@@ -6,7 +6,7 @@ Le parcours de quiz suit l’ordre de création des quizzes (`created_at` croiss
 
 ---
 
-## 📁 Structure du Projet
+## Structure du Projet
 
 
 
@@ -31,7 +31,7 @@ Quiz/
 
 
 
-## 🚀 Fonctionnalités
+## Fonctionnalités
 
 
 
@@ -83,7 +83,7 @@ Quiz/
 
 
 
-## 🛠️ Technologies
+## Technologies
 
 
 
@@ -98,7 +98,7 @@ Quiz/
 
 
 
-## ⚙️ Installation
+## Installation
 
 
 
@@ -221,7 +221,7 @@ Application disponible sur : `http://localhost:5173`
 
 
 
-## 👤 Compte Admin par défaut
+## Compte Admin par défaut
 
 
 
@@ -239,7 +239,7 @@ Password : password
 
 
 
-## 📡 Principales Routes API
+## Principales Routes API
 
 
 
@@ -287,7 +287,7 @@ Password : password
 
 
 
-## 🔐 Authentification
+## Authentification
 
 
 
@@ -315,7 +315,7 @@ Le frontend stocke le token dans `localStorage` et l’ajoute automatiquement vi
 
 
 
-## 🎮 Parcours de Quiz
+## Parcours de Quiz
 
 
 
@@ -337,7 +337,7 @@ Le frontend stocke le token dans `localStorage` et l’ajoute automatiquement vi
 
 
 
-## 🖥️ Pages Frontend Principales
+## Pages Frontend Principales
 
 
 
@@ -360,7 +360,7 @@ Le frontend stocke le token dans `localStorage` et l’ajoute automatiquement vi
 
 
 
-## 🧪 Test rapide
+## Test rapide
 
 
 
@@ -380,7 +380,7 @@ Le frontend stocke le token dans `localStorage` et l’ajoute automatiquement vi
 
 
 
-## 📝 Licence
+## Licence
 
 
 
