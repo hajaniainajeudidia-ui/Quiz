@@ -73,8 +73,6 @@ Quiz/
 
 ### Thématiques disponibles
 
-- Madagascar (Géographie, Histoire, Culture, Faune & Flore, Provinces, Climat…)
-
 - Développement (HTML/CSS, JavaScript, Vue.js 3, Laravel & PHP, Git & GitHub, MySQL, API REST)
 
 
